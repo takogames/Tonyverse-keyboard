@@ -1,0 +1,173 @@
+units:
+  # Proxy Spacing Variables
+  kx: cx
+  ky: cy
+  # Padding Variables
+  px: kx + 5
+  py: ky + 5
+
+points:
+  zones:
+    matrix:
+      key:
+       padding: 1ky
+       spread: 1kx
+      anchor:
+        rotate: 5
+        # fix kicad plate
+        shift: [100, -100] 
+      columns:
+        pinky:
+         key: 
+          column_net: P7
+        ring:
+         key:
+          column_net: P6
+        better:
+          key:
+            column_net: P5
+        middle:
+         key:
+          column_net: P4
+        index:
+         key:
+           column_net: P3
+        inner:
+         key:
+          column_net: P2
+      rows:
+        bottom:
+          row_net: P20
+          mirror.row_net: P0
+        top:
+          row_net: P21
+          mirror.row_net: P1
+    thumbfan:
+      anchor:
+        ref: matrix_inner_bottom
+        shift: [-22, -32]
+        rotate: -10
+      columns:
+        near:
+         key: 
+           column_net: P7
+        home:
+          key.origin: [-11.75, -9]
+          key:
+           column_net: P6
+        far:
+          key.origin: [-9.5, -9]
+          key:
+           column_net: P5
+      rows:
+        thumb:
+           row_net: P10
+           mirror.row_net: P9
+  rotate: -20
+  mirror:
+    ref: matrix_pinky_bottom
+    distance: 230
+
+outlines:
+
+   keys:
+    - what: rectangle
+      where: true
+      size: [kx -0.5, ky -0.5]
+      fillet: 1
+
+   board1: 
+    - what: polygon
+      operation: stack
+      points:
+      - ref: matrix_pinky_bottom
+        shift: [-0.55px, -0.5py]
+      - ref: matrix_pinky_top
+        shift: [-0.55px, 0.5py]
+      - ref: matrix_inner_top
+        shift: [0.5px, 0.5py]
+      - ref: matrix_inner_top
+        shift: [1.0kx,-0.4ky]
+      - ref: mirror_matrix_inner_top
+        shift: [1kx,-0.4ky]
+      - ref: mirror_matrix_inner_top
+        shift: [0.5px, 0.5py]
+      - ref: mirror_matrix_pinky_top
+        shift: [-0.55px, 0.5py]
+      - ref: mirror_matrix_pinky_bottom
+        shift: [-0.55px, -0.5py]
+      - ref: mirror_matrix_middle_bottom
+        shift: [-0.5px, -0.5py]
+      - ref: mirror_thumbfan_near_thumb
+        shift: [-0.5px, -0.5py]
+      - ref: mirror_thumbfan_far_thumb
+        shift: [0.5px, -0.5py]
+      - ref: mirror_thumbfan_far_thumb
+        shift: [0.5px, 0.7py]
+      - ref: thumbfan_far_thumb
+        shift: [0.5px, 0.7py]
+      - ref: thumbfan_far_thumb
+        shift: [0.5px, -0.5py]
+      - ref: thumbfan_near_thumb
+        shift: [-0.5px, -0.5py]
+      - ref: matrix_middle_bottom
+        shift: [-0.5px, -0.5py]
+      fillet: 2
+
+   combo:
+    - name: board1
+    - operation: subtract
+      name: keys
+
+pcbs:
+  tonyverse:
+    outlines:
+      main:
+        outline: board1
+    footprints:
+      choc_hotswap:
+        what: choc
+        where: true
+        params:
+          keycaps: true
+          reverse: false
+          hotswap: true
+          from: "{{column_net}}"
+          to: "{{colrow}}"
+      diode:
+        what: diode
+        where: true
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+        adjust:
+          shift: [0, -5]
+      promicro:
+        what: promicro
+        params:
+          orientation: "down"
+        where:
+          ref: matrix_inner_top
+          shift: [1.75kx,-1.45ky]
+          rotate: -75
+      reset:
+        what: button
+        params:
+          from: GND
+          to: RST
+        where:
+          ref: matrix_inner_bottom
+          shift: [0.8kx, 0.45ky]
+          rotate: -90
+      front_text: &text
+        what: text
+        where: &textWhere
+            ref: mirror_matrix_inner_bottom
+            shift: [-0.3kx, -0.8ky]
+            rotate: -5
+        params: &textParams
+            text: tonyverse :3
+            justify: left
+            h_size: 2.0
+            v_size: 2.0
+            thickness: 0.2
