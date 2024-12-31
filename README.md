@@ -1,3 +1,6 @@
+# this board currently has no firmware, because i never made it, use at your own risk
+- instead, try bbsteno from mechwild.
+
 # What is tonyverse?
 
 Tonyverse is a new budget stenography keyboard, designed to be the best bang-for-your-buck for new steno users.
